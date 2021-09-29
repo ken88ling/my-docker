@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  MSSQLSERVER:
+    restart: always
+    container_name: mssql_container
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_PID: Express
+      SA_PASSWORD: Fast1234
+    ports:
+      - '1433:1433'
+
+  activemq:
+    container_name: activemq_container
+    image: rmohr/activemq
+    ports:
+      - 8161:8161
+      - 6161:6161
+
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - '5050:80'
+
+volumes:
+  mssql_data:
+  mssql_log:
+  mssql_secrets:
+  postgres_data:
